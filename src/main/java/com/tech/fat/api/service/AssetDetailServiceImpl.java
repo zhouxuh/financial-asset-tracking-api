@@ -1,74 +1,66 @@
-package com.tech.libraryapi.service;
+package com.tech.fat.api.service;
 
-import com.tech.libraryapi.exception.BookAlreadyExistsException;
-import com.tech.libraryapi.exception.BookNotFoundException;
-import com.tech.libraryapi.model.Book;
-import com.tech.libraryapi.repository.BookDetailRepository;
+import com.tech.fat.api.exception.AssetAlreadyExistsException;
+import com.tech.fat.api.exception.AssetNotFoundException;
+import com.tech.fat.api.model.Asset;
+import com.tech.fat.api.repository.AssetDetailRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class BookDetailServiceImpl implements BookDetailService {
-    private final BookDetailRepository bookDetailRepository;
+public class AssetDetailServiceImpl implements AssetDetailService {
+    private final AssetDetailRepository assetDetailRepository;
 
-    public BookDetailServiceImpl(BookDetailRepository bookDetailRepository) {
-        this.bookDetailRepository = bookDetailRepository;
+    public AssetDetailServiceImpl(AssetDetailRepository assetDetailRepository) {
+        this.assetDetailRepository = assetDetailRepository;
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        List<Book> bookList = (List<Book>) bookDetailRepository.findAll();
-        if (bookList.isEmpty()) throw new BookNotFoundException();
-        return bookList;
+    public List<Asset> getAllAssets() {
+        List<Asset> assetList = (List<Asset>) assetDetailRepository.findAll();
+        if (assetList.isEmpty()) throw new AssetNotFoundException();
+        return assetList;
     }
 
     @Override
-    public Book addBook(Book book) throws BookAlreadyExistsException {
-        String isbn = book.getIsbn();
-        book.setId(null);
-        if (bookDetailRepository.findBookByIsbn(isbn).isPresent()) {
-            throw new BookAlreadyExistsException(isbn);
+    public Asset addAsset(Asset asset) throws AssetAlreadyExistsException {
+        String name = asset.getName();
+        asset.setId(null);
+        if (assetDetailRepository.findAssetByName(name).isPresent()) {
+            throw new AssetAlreadyExistsException(name);
         }
-        return bookDetailRepository.save(book);
+        return assetDetailRepository.save(asset);
     }
 
     @Override
-    public Book getBookByIsbn(String isbn) throws BookNotFoundException {
-        return bookDetailRepository.findBookByIsbn(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
+    public Asset getAssetByName(String name) throws AssetNotFoundException {
+        return assetDetailRepository.findAssetByName(name).orElseThrow(() -> new AssetNotFoundException(name));
     }
 
     @Override
-    public Book updateBook(Long id, Book newBook) {
-        return bookDetailRepository.findById(id)
-                .map(book -> {
-                    book.setAuthor(newBook.getAuthor());
-                    book.setIsbn(newBook.getIsbn());
-                    book.setName(newBook.getName());
-                    book.setPrice(newBook.getPrice());
-                    book.setQuantity(newBook.getQuantity());
-                    book.setDate(newBook.getDate());
-                    return bookDetailRepository.save(book);
+    public Asset updateAsset(Long id, Asset newAsset) {
+        return assetDetailRepository.findById(id)
+                .map(asset -> {
+                    asset.setName(newAsset.getName());
+                    asset.setQuantity(newAsset.getQuantity());
+                    asset.setPrice(newAsset.getPrice());
+                    asset.setCostBasis(newAsset.getCostBasis());
+                    asset.setNotes(newAsset.getNotes());
+                    return assetDetailRepository.save(asset);
                 })
-                .orElseThrow(() -> new BookNotFoundException(id));
+                .orElseThrow(() -> new AssetNotFoundException(id));
     }
 
     @Override
-    public Book getBookById(Long id) {
-        return bookDetailRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    public Asset getAssetById(Long id) {
+        return assetDetailRepository.findById(id).orElseThrow(() -> new AssetNotFoundException(id));
     }
 
     @Override
-    public List<Book> getBookByAuthor(String author) {
-        List<Book> bookList = bookDetailRepository.findBookByAuthor(author);
-        if (bookList.isEmpty()) throw new BookNotFoundException(author);
-        return bookList;
-    }
-
-    @Override
-    public Book deleteBookById(Long id) {
-        Book book = bookDetailRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-        bookDetailRepository.deleteById(id);
-        return book;
+    public Asset deleteAssetById(Long id) {
+        Asset asset = assetDetailRepository.findById(id).orElseThrow(() -> new AssetNotFoundException(id));
+        assetDetailRepository.deleteById(id);
+        return asset;
     }
 }

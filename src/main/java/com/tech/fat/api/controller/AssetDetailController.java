@@ -1,9 +1,10 @@
 package com.tech.fat.api.controller;
 
-import com.tech.libraryapi.model.Book;
-import com.tech.libraryapi.service.BookDetailService;
+import com.tech.fat.api.model.Asset;
+import com.tech.fat.api.service.AssetDetailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,55 +17,55 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1")
 @Validated
-public class BookDetailController {
-    private final BookDetailService bookDetailService;
+public class AssetDetailController {
+    private final AssetDetailService assetDetailService;
 
-    public BookDetailController(BookDetailService bookDetailService) {
-        this.bookDetailService = bookDetailService;
+    public AssetDetailController(AssetDetailService assetDetailService) {
+        this.assetDetailService = assetDetailService;
     }
 
-    @PostMapping("book")
-    ResponseEntity<Book> addBook(@Valid @RequestBody Book book) {
-        Book addedBook = bookDetailService.addBook(book);
-        return new ResponseEntity<>(addedBook, HttpStatus.CREATED);
+    @PostMapping("asset")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    ResponseEntity<Asset> addAsset(@Valid @RequestBody Asset asset) {
+        Asset addedAsset = assetDetailService.addAsset(asset);
+        return new ResponseEntity<>(addedAsset, HttpStatus.CREATED);
     }
 
-    @GetMapping("books")
-    ResponseEntity<List<Book>> getAllBooks() {
-        return new ResponseEntity<>(bookDetailService.getAllBooks(), HttpStatus.OK);
+    @GetMapping("assets")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    ResponseEntity<List<Asset>> getAllAssets() {
+        return new ResponseEntity<>(assetDetailService.getAllAssets(), HttpStatus.OK);
     }
 
-    @GetMapping("book/isbn/{isbn}")
-    ResponseEntity<Book> getBookByIsbn(@Size(min = 10, max = 13, message = "{book.isbn.size}")
-                                       @PathVariable(value="isbn") String isbn) {
-        Book book = bookDetailService.getBookByIsbn(isbn);
-        return new ResponseEntity<>(book, HttpStatus.OK);
+    @GetMapping("asset/name/{name}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    ResponseEntity<Asset> getAssetByName(@Size(min = 1, max = 10, message = "{asset.name.size}")
+                                       @PathVariable(value="name") String name) {
+        Asset asset = assetDetailService.getAssetByName(name.toUpperCase());
+        return new ResponseEntity<>(asset, HttpStatus.OK);
     }
 
-    @PutMapping("book/{id}")
-    public ResponseEntity<Book> updateBook(@Positive(message = "{book.id.positive}")
+    @PutMapping("asset/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Asset> updateAsset(@Positive(message = "{asset.id.positive}")
                                            @PathVariable(value="id") Long id,
-                                           @Valid @RequestBody Book book) {
-        Book updatedBook = bookDetailService.updateBook(id, book);
-        return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+                                           @Valid @RequestBody Asset asset) {
+        Asset updatedAsset = assetDetailService.updateAsset(id, asset);
+        return new ResponseEntity<>(updatedAsset, HttpStatus.OK);
     }
 
-    @DeleteMapping("book/{id}")
-    public ResponseEntity<Book> deleteBookById(@Positive(message = "{book.id.positive}")
+    @DeleteMapping("asset/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Asset> deleteAssetById(@Positive(message = "{asset.id.positive}")
                                                @PathVariable(value="id") Long id) {
-        Book deletedBook = bookDetailService.deleteBookById(id);
-        return new ResponseEntity<>(deletedBook, HttpStatus.OK);
+        Asset deletedAsset = assetDetailService.deleteAssetById(id);
+        return new ResponseEntity<>(deletedAsset, HttpStatus.OK);
     }
 
-    @GetMapping("book/{id}")
-    ResponseEntity<Book> getBookById(@Positive(message = "{book.id.positive}")
+    @GetMapping("asset/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    ResponseEntity<Asset> getAssetById(@Positive(message = "{asset.id.positive}")
                                      @PathVariable(value="id") Long id) {
-        return new ResponseEntity<>(bookDetailService.getBookById(id), HttpStatus.OK);
-    }
-
-    @GetMapping("book/author/{author}")
-    ResponseEntity<List<Book>> getBookByAuthor(@Size(min = 1, max = 80, message = "{book.author.size}")
-                                               @PathVariable(value="author") String author) {
-        return new ResponseEntity<>(bookDetailService.getBookByAuthor(author), HttpStatus.OK);
+        return new ResponseEntity<>(assetDetailService.getAssetById(id), HttpStatus.OK);
     }
 }

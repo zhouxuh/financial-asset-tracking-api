@@ -1,17 +1,15 @@
-package com.tech.libraryapi.repository;
+package com.tech.fat.api.repository;
 
-import com.tech.libraryapi.model.Book;
+import com.tech.fat.api.model.Asset;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface BookDetailRepository extends CrudRepository<Book, Long>  {
-    @Query("SELECT a FROM Book a WHERE a.isbn =:isbn")
-    Optional<Book> findBookByIsbn(@Param("isbn") String isbn);
+public interface AssetDetailRepository extends CrudRepository<Asset, Long>  {
 
-    @Query("SELECT a FROM Book a WHERE a.author =:author")
-    List<Book> findBookByAuthor(@Param("author") String author);
+    @Query("SELECT a FROM Asset a WHERE a.name =:name")
+    Optional<Asset> findAssetByName(@Param("name") String name);
 }
+

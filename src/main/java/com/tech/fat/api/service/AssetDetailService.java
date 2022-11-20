@@ -1,15 +1,15 @@
-package com.tech.libraryapi.service;
+package com.tech.fat.api.service;
 
-import com.tech.libraryapi.model.Book;
+import com.tech.fat.api.exception.AssetNotFoundException;
+import com.tech.fat.api.model.Asset;
 
 import java.util.List;
 
-public interface BookDetailService {
-    List<Book> getAllBooks();
-    Book addBook(Book book);
-    Book getBookByIsbn(String isbn);
-    Book updateBook(Long id, Book book);
-    Book deleteBookById(Long id);
-    Book getBookById(Long id);
-    List<Book> getBookByAuthor(String author);
+public interface AssetDetailService {
+    List<Asset> getAllAssets();
+    Asset addAsset(Asset Asset);
+    Asset getAssetByName(String name) throws AssetNotFoundException;
+    Asset updateAsset(Long id, Asset asset);
+    Asset deleteAssetById(Long id);
+    Asset getAssetById(Long id);
 }

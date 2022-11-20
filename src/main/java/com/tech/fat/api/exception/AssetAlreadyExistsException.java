@@ -1,7 +1,7 @@
-package com.tech.libraryapi.exception;
+package com.tech.fat.api.exception;
 
-public class BookAlreadyExistsException extends RuntimeException{
-    public BookAlreadyExistsException(String isbn) {
-        super("Book with ISBN " + isbn + " already exists.");
+public class AssetAlreadyExistsException extends RuntimeException{
+    public AssetAlreadyExistsException(String name) {
+        super("Asset with name " + name + " already exists.");
     }
 }

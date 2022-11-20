@@ -1,16 +1,16 @@
-package com.tech.libraryapi.exception;
+package com.tech.fat.api.exception;
 
-public class BookNotFoundException extends RuntimeException {
-    public BookNotFoundException(String str) {
-        super("Could not find the book by " + str);
+public class AssetNotFoundException extends RuntimeException {
+    public AssetNotFoundException(String str) {
+        super("Could not find the asset by " + str);
     }
 
-    public BookNotFoundException(Long id) {
-        super("Could not find the book by id: " + id);
+    public AssetNotFoundException(Long id) {
+        super("Could not find the asset by id: " + id);
     }
 
-    public BookNotFoundException() {
-        super("No book found.");
+    public AssetNotFoundException() {
+        super("No asset found.");
     }
 }
 

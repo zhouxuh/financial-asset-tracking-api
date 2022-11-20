@@ -14,37 +14,38 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book implements Serializable {
+public class Asset implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "{book.isbn.notNull}")
-    @Size(min = 10, max = 13, message = "{book.isbn.size}")
-    private String isbn;
-
-    @NotNull(message = "{book.name.notNull}")
-    @Size(min = 1, max = 80, message = "{book.name.size}")
+    @NotNull(message = "{asset.name.notNull}")
+    @Size(min = 1, max = 80, message = "{asset.name.size}")
     private String name;
 
-    @NotNull(message = "{book.author.notNull}")
-    @Size(min = 1, max = 80, message = "{book.author.size}")
-    private String author;
+    @NotNull(message = "{asset.quantity.notNull}")
+    @Min(value = 1, message = "{asset.quantity.min}")
+    @Max(value = 999999999, message = "{asset.quantity.max}")
+    private Long quantity;
 
-    @NotNull(message = "{book.quantity.notNull}")
-    @Min(value = 1, message = "{book.quantity.min}")
-    @Max(value = 10000, message = "{book.quantity.max}")
-    private int quantity;
-
-    @NotNull(message = "{book.price.notNull}")
-    @DecimalMin(value = "0.0", inclusive = false, message = "{book.price.DecimalMin}")
-    @DecimalMax(value = "99999.9", inclusive = false, message = "{book.price.DecimalMax}")
-    @Digits(integer=5, fraction=2, message = "{book.price.digits}")
+    @NotNull(message = "{asset.price.notNull}")
+    @DecimalMin(value = "0.00", message = "{asset.price.DecimalMin}")
+    @DecimalMax(value = "9999999999.99", message = "{asset.price.DecimalMax}")
+    @Digits(integer=10, fraction=2, message = "{asset.price.digits}")
     private BigDecimal price;
 
-    @NotNull(message = "{book.date.notNull}")
-    @Size(min = 1, max = 50, message = "{book.date.size}")
-    private String date;
+    @NotNull(message = "{asset.costBasis.notNull}")
+    @DecimalMin(value = "0.00", message = "{asset.costBasis.DecimalMin}")
+    @DecimalMax(value = "9999999999.99", message = "{asset.costBasis.DecimalMax}")
+    @Digits(integer=10, fraction=2, message = "{asset.costBasis.digits}")
+    private BigDecimal costBasis;
+
+    @Size(min = 1, max = 500, message = "{asset.notes.size}")
+    private String notes;
+
+    @NotNull
+    @Size(min = 1, max = 20)
+    private String userName;
 }
