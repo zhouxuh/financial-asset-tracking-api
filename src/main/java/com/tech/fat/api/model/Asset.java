@@ -45,7 +45,5 @@ public class Asset implements Serializable {
     @Size(min = 1, max = 500, message = "{asset.notes.size}")
     private String notes;
 
-    @NotNull
-    @Size(min = 1, max = 20)
     private String userName;
 }

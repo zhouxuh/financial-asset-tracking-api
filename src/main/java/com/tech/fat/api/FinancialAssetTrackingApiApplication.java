@@ -29,5 +29,4 @@ public class FinancialAssetTrackingApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(FinancialAssetTrackingApiApplication.class, args);
     }
-
 }

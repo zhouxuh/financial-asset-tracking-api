@@ -20,15 +20,14 @@ public class User {
     private long id;
 
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 4, max = 20)
     private String userName;
 
     @NotNull
-    @Size(min = 1, max = 80)
     private String password;
 
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 4, max = 20)
     private String roles;
 
     @NotNull

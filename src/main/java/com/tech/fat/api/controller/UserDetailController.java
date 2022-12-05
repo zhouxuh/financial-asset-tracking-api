@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping("api/v1/user")
 public class UserDetailController {
@@ -25,7 +26,11 @@ public class UserDetailController {
 
     @PostMapping("signup")
     public ResponseEntity signUp(@RequestBody User user) {
+        if (userRepository.findByUserName(user.getUserName()).isPresent()) {
+            return new ResponseEntity<>(user.getUserName() + " already exists.", HttpStatus.CONFLICT);
+        }
         user.setRoles(ROLE_USER);
+        user.setActive(true);
         String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
         userRepository.save(user);
@@ -34,6 +39,9 @@ public class UserDetailController {
 
     @PostMapping("adminsignup")
     public ResponseEntity adminSignUp(@RequestBody User user) {
+        if (userRepository.findByUserName(user.getUserName()).isPresent()) {
+            return new ResponseEntity<>(user.getUserName() + " already exists.", HttpStatus.CONFLICT);
+        }
         user.setRoles(ROLE_ADMIN);
         String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
