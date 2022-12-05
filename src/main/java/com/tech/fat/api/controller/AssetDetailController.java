@@ -26,7 +26,7 @@ public class AssetDetailController {
     }
 
     @PostMapping("asset")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     ResponseEntity<Asset> addAsset(@Valid @RequestBody Asset asset, Authentication authentication) {
         String userName = authentication.getName();
         asset.setUserName(userName);
@@ -35,13 +35,13 @@ public class AssetDetailController {
     }
 
     @GetMapping("assets")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     ResponseEntity<List<Asset>> getAllAssets(Authentication authentication) {
         return new ResponseEntity<>(assetDetailService.getAllAssets(authentication.getName()), HttpStatus.OK);
     }
 
     @GetMapping("asset/name/{name}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     ResponseEntity<Asset> getAssetByName(@Size(min = 1, max = 10, message = "{asset.name.size}")
                                        @PathVariable(value="name") String name, Authentication authentication) {
         Asset asset = assetDetailService.getAssetByNameAndUserName(name.toUpperCase(), authentication.getName());
@@ -49,7 +49,7 @@ public class AssetDetailController {
     }
 
     @PutMapping("asset/{id}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Asset> updateAsset(@Positive(message = "{asset.id.positive}")
                                            @PathVariable(value="id") Long id,
                                            @Valid @RequestBody Asset asset) {
@@ -58,7 +58,7 @@ public class AssetDetailController {
     }
 
     @DeleteMapping("asset/{id}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Asset> deleteAssetById(@Positive(message = "{asset.id.positive}")
                                                @PathVariable(value="id") Long id) {
         Asset deletedAsset = assetDetailService.deleteAssetById(id);
@@ -66,7 +66,7 @@ public class AssetDetailController {
     }
 
     @GetMapping("asset/{id}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     ResponseEntity<Asset> getAssetById(@Positive(message = "{asset.id.positive}")
                                      @PathVariable(value="id") Long id) {
         return new ResponseEntity<>(assetDetailService.getAssetById(id), HttpStatus.OK);
