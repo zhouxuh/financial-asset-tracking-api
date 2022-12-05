@@ -17,25 +17,23 @@ public class AssetDetailServiceImpl implements AssetDetailService {
     }
 
     @Override
-    public List<Asset> getAllAssets() {
-        List<Asset> assetList = (List<Asset>) assetDetailRepository.findAll();
-        if (assetList.isEmpty()) throw new AssetNotFoundException();
-        return assetList;
+    public List<Asset> getAllAssets(String userName) {
+        return assetDetailRepository.findAllByUserName(userName);
     }
 
     @Override
     public Asset addAsset(Asset asset) throws AssetAlreadyExistsException {
         String name = asset.getName();
         asset.setId(null);
-        if (assetDetailRepository.findAssetByName(name).isPresent()) {
+        if (assetDetailRepository.findAssetByNameAndUserName(name, asset.getUserName()).isPresent()) {
             throw new AssetAlreadyExistsException(name);
         }
         return assetDetailRepository.save(asset);
     }
 
     @Override
-    public Asset getAssetByName(String name) throws AssetNotFoundException {
-        return assetDetailRepository.findAssetByName(name).orElseThrow(() -> new AssetNotFoundException(name));
+    public Asset getAssetByNameAndUserName(String name, String userName) throws AssetNotFoundException {
+        return assetDetailRepository.findAssetByNameAndUserName(name, userName).orElseThrow(() -> new AssetNotFoundException(name));
     }
 
     @Override
